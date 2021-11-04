@@ -9,6 +9,19 @@ package entity;
  */
 public class Borrower {
 
+	private int cardNo;
+	private String name;
+	private String address;
+	private String phone;
+
+	public Borrower(int cardNo, String name, String address, String phone) {
+		super();
+		this.cardNo = cardNo;
+		this.name = name;
+		this.address = address;
+		this.phone = phone;
+	}
+
 	public int getCardNo() {
 		return cardNo;
 	}
@@ -40,10 +53,5 @@ public class Borrower {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-
-	private int cardNo;
-	private String name;
-	private String address;
-	private String phone;
 
 }
