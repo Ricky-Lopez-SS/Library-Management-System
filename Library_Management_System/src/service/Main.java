@@ -3,6 +3,7 @@
  */
 package service;
 
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import dao.Dao;
@@ -21,13 +22,41 @@ public class Main {
 	public static void main(String[] args) throws InterruptedException {
 		
 		Dao DB = new Dao();
+		Scanner scnnr = new Scanner(System.in);
+		
+		String input = "";
+		int code = 0; //initialized with main menu code. 
 		
 		//TODO: clean up Main and handle return codes!
+		//TODO: close scanner
 		
 
 		View.displayMain();
-		TimeUnit.SECONDS.sleep(3);
-		int Lib2Code = Librarian.lib1(DB);
+		
+		while(scnnr.hasNextLine()) {
+			input = scnnr.nextLine();
+		
+			if("1".equals(input)) 
+				code = new Librarian(DB, scnnr).lib1();
+			else if("2".equals(input)) {
+				System.out.println("IMPLEMENT THIS");
+				break;
+			}else if("3".equals(input)) {
+				System.out.println("IMPLEMENT THIS");
+				break;
+			}else if("quit".equals(input.toLowerCase())) {
+				scnnr.close();
+				return;
+			}else
+				View.printUserErr();
+			
+			if(code == 0) {
+				View.displayMain();
+				continue;
+			}
+		}
+			
+
 		
 
 	}
