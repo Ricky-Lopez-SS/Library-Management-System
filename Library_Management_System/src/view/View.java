@@ -5,7 +5,6 @@ package view;
 
 import java.util.List;
 
-import entity.Book;
 import entity.Branch;
 
 /**
@@ -89,9 +88,9 @@ public class View {
 		
 		System.out.format("Pick the Book you want to add copies of to your branch. %n%n");
 		
-		for(int i = 1; i <= booksAndAuthors.size(); i++) {
+		for(int i = 1; i <= booksAndAuthors.size(); i++) 
 			System.out.format("%d) %s%n", i, booksAndAuthors.get(i-1));
-		}
+		
 	}
 	
 	public static void displayLib4(int numOfCopies) {
@@ -99,6 +98,88 @@ public class View {
 		System.out.format("Existing number of copies: %d%n%n" , numOfCopies);
 		
 		System.out.format("Enter new number of copies:%n%n");
+		
+	}
+	
+	public static void displayCardCheck() {
+		
+		System.out.format("%n*******************************************************************%n%n");
+		
+		System.out.format("Please enter your Card Number:%n%n");
+		
+	}
+	
+	public static void displayBor1(String name) {
+		
+		System.out.format("%n*******************************************************************%n%n");
+		
+		System.out.format("Hello, %s! What would you like to do?%n%n", name);
+		
+		System.out.println("1) Check out a Book");
+		System.out.println("2) Return a Book");
+		System.out.format("%n3) Quit to Main Menu%n%n");
+		
+	}
+	
+	public static void displayBor2(List<Branch> branchList) {
+		
+		System.out.format("%n*******************************************************************%n%n");
+		
+		System.out.format("Pick the Branch you want to check out%n%n");
+		
+		int counter;
+		
+		for(counter = 1; counter <= branchList.size(); counter++)
+			System.out.format("%d) %s Library%n" , counter, branchList.get(counter-1).getBranchName());
+		
+		System.out.format("%n%d) Quit to previous menu%n%n", counter);
+		
+	}
+	
+	public static void displayBor2Cont(List<String> list) {
+		
+		System.out.format("Pick the Book you would like to check out.%n%n");
+		
+		int counter;
+		
+		for(counter = 1; counter <= list.size(); counter++) 
+			System.out.format("%d) %s%n" , counter , list.get(counter - 1));
+		
+		System.out.format("%n%d) Quit to Main Menu%n%n", counter);
+		
+		
+		
+		
+	}
+	
+	public static void displayBor3(List<Branch> branchList) {
+		
+		System.out.format("%n*******************************************************************%n%n");
+		
+		System.out.format("Pick the Branch you want to return a book to.%n%n");
+		
+		int counter;
+		
+		for(counter = 1; counter <= branchList.size(); counter++)
+			System.out.format("%d) %s Library%n" , counter, branchList.get(counter-1).getBranchName());
+		
+		System.out.format("%n%d) Quit to previous menu%n%n", counter);
+		
+	}
+	
+	public static void displayBor3Cont(List<String> list) {
+		
+		System.out.format("Pick the Book you would like to return. %n%n");
+		
+		int counter;
+		
+		for(counter = 1; counter <= list.size(); counter++) 
+			System.out.format("%d) %s%n" , counter , list.get(counter - 1));
+		
+		System.out.format("%n%d) Quit to Main Menu%n%n", counter);
+		
+		
+		
 		
 	}
 	
@@ -112,6 +193,10 @@ public class View {
 	
 	public static void printSQLErr() {
 		System.out.println("Sorry, an SQL Error has occurred. Please try again, or try modifying the database.");
+	}
+	
+	public static void cancelOperationNotice() {
+		System.out.println("Operation has been cancelled.");
 	}
 
 }

@@ -41,10 +41,9 @@ public class Main {
 			else if("2".equals(input)) {
 				System.out.println("IMPLEMENT THIS");
 				break;
-			}else if("3".equals(input)) {
-				System.out.println("IMPLEMENT THIS");
-				break;
-			}else if("quit".equals(input.toLowerCase())) {
+			}else if("3".equals(input)) 
+				code = new User(DB, scnnr).bor1();
+			else if("quit".equals(input.toLowerCase())) {
 				scnnr.close();
 				return;
 			}else
