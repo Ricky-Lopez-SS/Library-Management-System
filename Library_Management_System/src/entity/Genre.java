@@ -10,10 +10,10 @@ package entity;
 public class Genre {
 
 	private int genreId;
-	private int genreName;
+	private String genreName;
 	
 
-	public Genre(int genreId, int genreName) {
+	public Genre(int genreId, String genreName) {
 		super();
 		this.genreId = genreId;
 		this.genreName = genreName;
@@ -27,11 +27,11 @@ public class Genre {
 		this.genreId = genreId;
 	}
 
-	public int getGenreName() {
+	public String getGenreName() {
 		return genreName;
 	}
 
-	public void setGenreName(int genreName) {
+	public void setGenreName(String genreName) {
 		this.genreName = genreName;
 	}
 

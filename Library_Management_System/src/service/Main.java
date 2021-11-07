@@ -38,10 +38,9 @@ public class Main {
 		
 			if("1".equals(input)) 
 				code = new Librarian(DB, scnnr).lib1();
-			else if("2".equals(input)) {
-				System.out.println("IMPLEMENT THIS");
-				break;
-			}else if("3".equals(input)) 
+			else if("2".equals(input)) 
+				code = new Administrator(DB, scnnr).admin1();
+			else if("3".equals(input)) 
 				code = new User(DB, scnnr).bor1();
 			else if("quit".equals(input.toLowerCase())) {
 				scnnr.close();

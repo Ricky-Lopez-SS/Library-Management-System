@@ -10,10 +10,13 @@ package entity;
 public class Author {
 
 	private int authorId;
+	private String authorName;
 
-	public Author(int authorId) {
+
+	public Author(int authorId, String authorName) {
 		super();
 		this.authorId = authorId;
+		this.authorName = authorName;
 	}
 
 	public int getAuthorId() {
@@ -22,6 +25,15 @@ public class Author {
 
 	public void setAuthorId(int authorId) {
 		this.authorId = authorId;
+	}
+	
+
+	public String getAuthorName() {
+		return authorName;
+	}
+
+	public void setAuthorName(String authorName) {
+		this.authorName = authorName;
 	}
 
 }

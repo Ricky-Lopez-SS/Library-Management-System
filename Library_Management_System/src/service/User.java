@@ -13,6 +13,7 @@ import entity.Book;
 import entity.Borrower;
 import entity.Branch;
 import view.View;
+import view.ViewUser;
 
 /**
  * @author Lopez
@@ -30,7 +31,7 @@ public class User {
 	
 	public int bor1() {
 		
-		View.displayCardCheck();
+		ViewUser.displayCardCheck();
 		String input = "";
 		Borrower borrower = null;
 		int returnCode = 1; 
@@ -58,7 +59,7 @@ public class User {
 		}
 		
 		
-		View.displayBor1(borrower.getName());
+		ViewUser.displayBor1(borrower.getName());
 		
 		while(scnnr.hasNextLine()) { //loop for option select. 
 			
@@ -78,7 +79,7 @@ public class User {
 			else if(returnCode == 3)
 				return 0; //Main Menu code
 			else
-				View.displayBor1(borrower.getName());
+				ViewUser.displayBor1(borrower.getName());
 			continue;
 			
 			
@@ -108,7 +109,7 @@ public class User {
 			return -1;
 		}
 		
-		View.displayBor2(branchList);
+		ViewUser.displayBor2(branchList);
 		
 		while(scnnr.hasNextLine()) {
 			
@@ -131,7 +132,7 @@ public class User {
 				booksAndAuthors = DB.retrieveBookTitlesAndAuthors(branch.getBranchId());
 				bookList = DB.retrieveBooks(branch.getBranchId());
 				
-				View.displayBor2Cont(booksAndAuthors);
+				ViewUser.displayBor2Cont(booksAndAuthors);
 				
 				break;
 				
@@ -205,7 +206,7 @@ public int bor3(Borrower borrower) {
 			return -1;
 		}
 		
-		View.displayBor3(branchList);
+		ViewUser.displayBor3(branchList);
 		
 		while(scnnr.hasNextLine()) {
 			
@@ -228,7 +229,7 @@ public int bor3(Borrower borrower) {
 				booksAndAuthors = DB.retrieveBookTitlesAndAuthors(branch.getBranchId());
 				bookList = DB.retrieveBooks(branch.getBranchId());
 				
-				View.displayBor3Cont(booksAndAuthors);
+				ViewUser.displayBor3Cont(booksAndAuthors);
 				
 				break;
 				

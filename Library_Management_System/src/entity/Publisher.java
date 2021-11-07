@@ -13,6 +13,23 @@ public class Publisher {
 	private int publisherId;
 	private String publisherName;
 	private String publisherAddress;
+	private String publisherPhone;
+
+	public Publisher(int publisherId, String publisherName, String publisherAddress, String publisherPhone) {
+		super();
+		this.publisherId = publisherId;
+		this.publisherName = publisherName;
+		this.publisherAddress = publisherAddress;
+		this.publisherPhone = publisherPhone;
+	}
+
+	public String getPublisherPhone() {
+		return publisherPhone;
+	}
+
+	public void setPublisherPhone(String publisherPhone) {
+		this.publisherPhone = publisherPhone;
+	}
 
 	public int getPublisherId() {
 		return publisherId;

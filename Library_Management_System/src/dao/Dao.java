@@ -42,6 +42,16 @@ public class Dao {
 
 	}
 	
+	public int createAuthor(String authorId, String authorName) throws SQLException {
+		
+		String query = String.format("INSERT INTO tbl_author VALUES (%s, '%s')" , authorId, authorName);
+		
+		PreparedStatement stmnt = conn.prepareStatement(query);
+		
+		return stmnt.executeUpdate();
+		
+	}
+	
 	
 	public Borrower validateCardNumber(String cardNo) throws SQLException {
 		
@@ -178,6 +188,84 @@ public class Dao {
 		
 	}
 	
+	public List<Publisher> retrievePublishers() throws SQLException {
+		
+		List<Publisher> list = new ArrayList<Publisher>();
+		
+		String query = "SELECT * FROM tbl_publisher";
+		
+		PreparedStatement stmnt = conn.prepareStatement(query);
+		
+		ResultSet rs = stmnt.executeQuery();
+		
+		while(rs.next()) {
+			list.add(new Publisher
+					(rs.getInt("publisherId"), rs.getString("publisherName") , rs.getString("publisherAddress"), rs.getString("publisherPhone")) );
+		}
+		
+		
+		return list;
+		
+	}
+	
+	public List<Author> retrieveAuthors() throws SQLException {
+		
+		List<Author> list = new ArrayList<Author>();
+		
+		String query = "SELECT * FROM tbl_author";
+		
+		PreparedStatement stmnt = conn.prepareStatement(query);
+		
+		ResultSet rs = stmnt.executeQuery();
+		
+		while(rs.next()) {
+			list.add( new Author(rs.getInt("authorId"), rs.getString("authorName")) );
+		}
+		
+		
+		return list;
+		
+	}
+	
+	public List<Genre> retrieveGenres() throws SQLException {
+		
+		List<Genre> list = new ArrayList<Genre>();
+		
+		String query = "SELECT * FROM tbl_genre";
+		
+		PreparedStatement stmnt = conn.prepareStatement(query);
+		
+		ResultSet rs = stmnt.executeQuery();
+		
+		while(rs.next()) {
+			list.add( new Genre(rs.getInt("genre_id"), rs.getString("genre_name")) );
+		}
+		
+		
+		return list;
+		
+	}
+	
+	public List<Borrower> retrieveBorrowers() throws SQLException {
+		
+		List<Borrower> list = new ArrayList<Borrower>();
+		
+		String query = "SELECT * FROM tbl_borrower";
+		
+		PreparedStatement stmnt = conn.prepareStatement(query);
+		
+		ResultSet rs = stmnt.executeQuery();
+		
+		while(rs.next()) {
+			list.add( new Borrower
+					(rs.getInt("cardNo"), rs.getString("name"), rs.getString("address"), rs.getString("phone")) );
+		}
+		
+		
+		return list;
+		
+	}
+	
 	
 	public List<Book> retrieveBooksOfBranch(int branchId) throws SQLException {
 		
@@ -269,14 +357,83 @@ public class Dao {
 	
 	public int createBookLoanEntry(int bookId, int branchId, int cardNo) throws SQLException {
 		
-		String query = String.format("INSERT INTO tbl_book_loans VALUES (%d, %d, %d, current_date() , DATE_ADD(current_date() , INTERVAL 7 DAY), null )", bookId, branchId, cardNo);
-		
-		System.out.println(query);
+		String query = String.format("INSERT INTO tbl_book_loans VALUES (%d, %d, %d, current_date() , DATE_ADD(current_date() , INTERVAL 7 DAY), null )", 
+				bookId, branchId, cardNo);
 		
 		PreparedStatement stmnt = conn.prepareStatement(query);
 		
 		return stmnt.executeUpdate();
 		
+	}
+
+
+	public int createBookCopies(int bookId, int branchId, int newCopies) throws SQLException {
+		
+		String query = String.format("INSERT INTO tbl_book_copies VALUES (%d, %d, %d)" , bookId, branchId, newCopies);
+		
+		PreparedStatement stmnt = conn.prepareStatement(query);
+		
+		return stmnt.executeUpdate();
+		
+	}
+
+	public int createBook(String bookId, String title, String pubId) throws SQLException {
+		
+		String query = String.format("INSERT INTO tbl_book VALUES (%s , '%s' , %s)" , bookId, title, pubId);
+		
+		PreparedStatement stmnt = conn.prepareStatement(query);
+		
+		return stmnt.executeUpdate();
+		
+	}
+	
+	
+	//TODO: fix case where phoneNumber input will be incorrectly read as an integer!
+	
+	public int createItem(String tableName, String[] fieldValues) throws SQLException {
+		
+		StringBuilder query = new StringBuilder("INSERT INTO ");
+		
+		query.append(tableName + " VALUES (");
+		
+		for(String s : fieldValues) {
+			
+			try {
+				
+				Integer.parseInt(s);
+				query.append(String.format("%s, " , s));
+				
+			}catch(NumberFormatException e) { //String cannot be read as an integer, therefore it is not an integer.
+				
+				query.append(String.format("'%s', " , s));
+				continue;
+				
+			}
+			
+		}
+		
+		//gets rid of ", " at the end of query after loop.
+		query = new StringBuilder(query.substring(0, query.length()-2)) ;
+		
+		query.append(")");
+		
+		System.out.println(query); return 1;
+		
+		/*
+		PreparedStatement stmnt = conn.prepareStatement(query.toString());
+	
+		return stmnt.executeUpdate();
+		*/
+		
+	}
+
+	public ResultSet retrieveResultSet(String tableName) throws SQLException {
+		
+		String query = String.format("SELECT * FROM %s" , tableName);
+		
+		PreparedStatement stmnt = conn.prepareStatement(query);
+		
+		return stmnt.executeQuery();
 	}
 
 }

@@ -12,6 +12,7 @@ import dao.Dao;
 import entity.Book;
 import entity.Branch;
 import view.View;
+import view.ViewLibrarian;
 
 /**
  * @author rickylopez TODO: CLEAN UP CODE
@@ -40,7 +41,7 @@ public class Librarian {
 			return -1;
 		}
 
-		View.displayLib1(libBranches);
+		ViewLibrarian.displayLib1(libBranches);
 
 		// grab user input.
 
@@ -76,7 +77,7 @@ public class Librarian {
 
 	public int lib2(Branch branch) {
 
-		View.displayLib2(branch);
+		ViewLibrarian.displayLib2(branch);
 
 		int input = 0;
 		scnnr.nextLine();
@@ -94,7 +95,7 @@ public class Librarian {
 
 				lib3(branch);
 				try {
-					View.displayLib2(DB.retrieveLibraryBranch(branch.getBranchId()));
+					ViewLibrarian.displayLib2(DB.retrieveLibraryBranch(branch.getBranchId()));
 				} catch (SQLException e) {
 					View.printSQLErr();
 				}
@@ -103,7 +104,7 @@ public class Librarian {
 
 				lib4(branch);
 				try {
-					View.displayLib2(DB.retrieveLibraryBranch(branch.getBranchId()));
+					ViewLibrarian.displayLib2(DB.retrieveLibraryBranch(branch.getBranchId()));
 				} catch (SQLException e) {
 					View.printSQLErr();
 				}
@@ -127,7 +128,7 @@ public class Librarian {
 
 		while (true) {
 
-			View.displayLib3(branch);
+			ViewLibrarian.displayLib3(branch);
 
 			if (scnnr.hasNextLine())
 				input = scnnr.nextLine();
@@ -140,7 +141,7 @@ public class Librarian {
 			else
 				newBranchName = input;
 
-			View.displayLib3();
+			ViewLibrarian.displayLib3();
 
 			if (scnnr.hasNextLine())
 				input = scnnr.nextLine();
@@ -188,7 +189,7 @@ public class Librarian {
 			return -1;
 		}
 
-		View.displayLib4(branch, titlesAndAuthors);
+		ViewLibrarian.displayLib4(branch, titlesAndAuthors);
 
 		while (scnnr.hasNextLine()) {
 
@@ -215,7 +216,7 @@ public class Librarian {
 			return -1;
 		}
 
-		View.displayLib4(numOfCopies);
+		ViewLibrarian.displayLib4(numOfCopies);
 
 		while (scnnr.hasNextLine()) {
 			
@@ -229,7 +230,12 @@ public class Librarian {
 					continue;
 				}
 				
-				DB.updateNumberOfCopies(books.get(bookChoice - 1).getBookId(), branch.getBranchId(), newCopies);
+				int isUpdated = DB.updateNumberOfCopies(books.get(bookChoice - 1).getBookId(), branch.getBranchId(), newCopies);
+				
+				if(isUpdated == 0)  //branch does not have a row for this book yet
+					DB.createBookCopies(books.get(bookChoice - 1).getBookId(), branch.getBranchId(), newCopies);
+				
+				
 				
 			} catch (NumberFormatException e) {
 				View.printUserErr();
