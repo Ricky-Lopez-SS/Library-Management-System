@@ -45,7 +45,6 @@ public class Librarian {
 
 		// grab user input.
 
-		// Scanner scnnr = new Scanner(System.in);
 		int input = 0;
 
 		while (true) {

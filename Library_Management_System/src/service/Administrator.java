@@ -3,15 +3,14 @@
  */
 package service;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import dao.Dao;
 import entity.Author;
+import entity.BookLoan;
 import entity.Borrower;
 import entity.Branch;
 import entity.Genre;
@@ -375,7 +374,14 @@ public class Administrator {
 			}
 		}catch(SQLException e) {
 				View.printSQLErr();
-				return 0; 
+				return 0; //Main Menu Code
+		}
+		
+		ViewAdmin.displayAdminRead();
+		
+		if(scnnr.hasNextLine()) {
+			scnnr.nextLine();
+			return 1;
 		}
 		
 		return 1;
@@ -386,6 +392,7 @@ public class Administrator {
 		
 		
 		List<Modelable> items = null;
+		
 		String field, newFieldValue;
 		int selectionValue = -1;
 		field = newFieldValue = "";
@@ -406,9 +413,14 @@ public class Administrator {
 					
 					
 					ViewAdmin.displayAdminUpdate(field, items);
-					
+				
 					if(scnnr.hasNextLine())
 						selectionValue = Integer.parseInt(scnnr.nextLine());
+					
+					if(selectionValue == items.size() + 1) { //Quit to Admin menu
+						View.cancelOperationNotice();
+						return 1;
+					}
 					
 					ViewAdmin.displayAdminUpdate();
 					
@@ -416,7 +428,7 @@ public class Administrator {
 						newFieldValue = scnnr.nextLine();
 					
 					DB.updateItem
-						(field, newFieldValue, "authorId", items.get(selectionValue-1).getVerifiableAttribute() );
+						("tbl_author", field, newFieldValue, "authorId", items.get(selectionValue-1).getVerifiableAttribute() );
 					
 					break;
 					
@@ -438,13 +450,18 @@ public class Administrator {
 					if(scnnr.hasNextLine())
 						selectionValue = Integer.parseInt(scnnr.nextLine());
 					
+					if(selectionValue == items.size() + 1) { //Quit to Admin menu
+						View.cancelOperationNotice();
+						return 1;
+					}
+					
 					ViewAdmin.displayAdminUpdate();
 					
 					if(scnnr.hasNextLine())
 						newFieldValue = scnnr.nextLine();
 					
 					DB.updateItem
-						(field, newFieldValue, "bookId", items.get(selectionValue-1).getVerifiableAttribute() );
+						("tbl_book", field, newFieldValue, "bookId", items.get(selectionValue-1).getVerifiableAttribute() );
 					
 					break;
 					
@@ -456,7 +473,7 @@ public class Administrator {
 						field = scnnr.nextLine();
 					
 					//my pride and joy
-					items = DB.retrieveBooks()
+					items = DB.retrieveBorrowers()
 							.stream().map( (x) -> (Modelable) x ).collect(Collectors.toList());
 					
 					
@@ -465,13 +482,18 @@ public class Administrator {
 					if(scnnr.hasNextLine())
 						selectionValue = Integer.parseInt(scnnr.nextLine());
 					
+					if(selectionValue == items.size() + 1) { //Quit to Admin menu
+						View.cancelOperationNotice();
+						return 1;
+					}
+					
 					ViewAdmin.displayAdminUpdate();
 					
 					if(scnnr.hasNextLine())
 						newFieldValue = scnnr.nextLine();
 					
 					DB.updateItem
-						(field, newFieldValue, "cardNo", items.get(selectionValue-1).getVerifiableAttribute() );
+						("tbl_borrower", field, newFieldValue, "cardNo", items.get(selectionValue-1).getVerifiableAttribute() );
 					
 					break;
 				
@@ -483,7 +505,7 @@ public class Administrator {
 						field = scnnr.nextLine();
 					
 					//my pride and joy
-					items = DB.retrieveBooks()
+					items = DB.retrieveLibraryBranches()
 							.stream().map( (x) -> (Modelable) x ).collect(Collectors.toList());
 					
 					
@@ -492,13 +514,18 @@ public class Administrator {
 					if(scnnr.hasNextLine())
 						selectionValue = Integer.parseInt(scnnr.nextLine());
 					
+					if(selectionValue == items.size() + 1) { //Quit to Admin menu
+						View.cancelOperationNotice();
+						return 1;
+					}
+					
 					ViewAdmin.displayAdminUpdate();
 					
 					if(scnnr.hasNextLine())
 						newFieldValue = scnnr.nextLine();
 					
 					DB.updateItem
-						(field, newFieldValue, "branchId", items.get(selectionValue-1).getVerifiableAttribute() );
+						("tbl_library_branch", field, newFieldValue, "branchId", items.get(selectionValue-1).getVerifiableAttribute() );
 					
 					break;
 					
@@ -510,7 +537,7 @@ public class Administrator {
 						field = scnnr.nextLine();
 					
 					//my pride and joy
-					items = DB.retrieveBooks()
+					items = DB.retrieveGenres()
 							.stream().map( (x) -> (Modelable) x ).collect(Collectors.toList());
 					
 					
@@ -519,13 +546,18 @@ public class Administrator {
 					if(scnnr.hasNextLine())
 						selectionValue = Integer.parseInt(scnnr.nextLine());
 					
+					if(selectionValue == items.size() + 1) { //Quit to Admin menu
+						View.cancelOperationNotice();
+						return 1;
+					}
+					
 					ViewAdmin.displayAdminUpdate();
 					
 					if(scnnr.hasNextLine())
 						newFieldValue = scnnr.nextLine();
 					
 					DB.updateItem
-						(field, newFieldValue, "genreId", items.get(selectionValue-1).getVerifiableAttribute() );
+						("tbl_genre", field, newFieldValue, "genreId", items.get(selectionValue-1).getVerifiableAttribute() );
 					
 					break;
 					
@@ -537,7 +569,7 @@ public class Administrator {
 						field = scnnr.nextLine();
 					
 					//my pride and joy
-					items = DB.retrieveBooks()
+					items = DB.retrievePublishers()
 							.stream().map( (x) -> (Modelable) x ).collect(Collectors.toList());
 					
 					
@@ -546,23 +578,32 @@ public class Administrator {
 					if(scnnr.hasNextLine())
 						selectionValue = Integer.parseInt(scnnr.nextLine());
 					
+					if(selectionValue == items.size() + 1) { //Quit to Admin menu
+						View.cancelOperationNotice();
+						return 1;
+					}
+	
+					
 					ViewAdmin.displayAdminUpdate();
 					
 					if(scnnr.hasNextLine())
 						newFieldValue = scnnr.nextLine();
 					
 					DB.updateItem
-						(field, newFieldValue, "publisherId", items.get(selectionValue-1).getVerifiableAttribute() );
+						("tbl_publisher", field, newFieldValue, "publisherId", items.get(selectionValue-1).getVerifiableAttribute() );
 					
 					break;
 			}
-		}catch(Exception e) {
+		}catch(SQLException e) {
 			View.printSQLErr();
-			return -1;
+			return 0;
+		}catch(NumberFormatException e) {
+			View.printUserErr();
+			return 0;
 		}
 		
 		View.success();
-		return 0;
+		return 1;
 	}
 
 
@@ -640,11 +681,53 @@ public class Administrator {
 		
 		View.success();
 
-		return 0;
+		return 1;
 	}
 
 
 	public int admin2() {
+		
+		List<BookLoan> bookLoans = null;
+		List<String> bookLoanStrings = null;
+		int selectionValue = 0;
+		String newDate = "";
+		
+		
+		try {
+			
+			bookLoans = DB.retrieveBookLoans();
+			bookLoanStrings = DB.retrieveBookLoansAndNames();
+			
+			ViewAdmin.displayAdmin2(bookLoanStrings);
+			
+			if(scnnr.hasNextLine())
+				selectionValue = Integer.parseInt(scnnr.nextLine());
+			
+			if(selectionValue == bookLoans.size() + 1) {
+				View.cancelOperationNotice();
+				return 1; //Admin menu
+			}
+			
+			if(selectionValue > bookLoans.size()) {
+				View.printUserErr();
+				return 1;
+			}
+			
+			ViewAdmin.displayAdmin2Cont();
+			
+			if(scnnr.hasNextLine())
+				newDate = scnnr.nextLine();				
+			
+			DB.updateBookLoan
+				(bookLoans.get(selectionValue-1).getBookId(), bookLoans.get(selectionValue-1).getBranchId() , bookLoans.get(selectionValue-1).getCardNo(), newDate);
+
+			
+		}catch(SQLException e) {
+			View.printSQLErr();
+			return 0; 
+		}
+		
+		View.success();
 		
 		
 		return 1;

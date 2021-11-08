@@ -22,7 +22,8 @@ public static void displayCardCheck() {
 		
 		System.out.println("1) Check out a Book");
 		System.out.println("2) Return a Book");
-		System.out.format("%n3) Quit to Main Menu%n%n");
+		System.out.println("3) Show all Books available");
+		System.out.format("%n4) Quit to Main Menu%n%n");
 		
 	}
 	
@@ -87,6 +88,42 @@ public static void displayCardCheck() {
 		
 		
 	}
+
+	public static void displayNoLoan() {
+		System.out.format("%nYou do not have a loan out for this book!%n");
+		
+	}
+
+	public static void displayBor4(List<String> bookInfo) {
+		
+		int counter;
+	
+		System.out.format("%n*******************************************************************%n%n");
+		
+		System.out.format("Choose a book you would like to see the availability for:%n%n");
+		
+		for(counter = 1; counter <= bookInfo.size(); counter++) {
+			System.out.format("%d) %s%n", counter, bookInfo.get(counter-1));
+		}
+		
+		System.out.format("%d) Quit to User Menu%n%n" , counter);
+		
+		
+	}
+
+	public static void displayBor4Cont(List<Branch> branchList) {
+		
+		System.out.format("This book is available at:%n");
+		
+		for(Branch b : branchList) {
+			System.out.format("%s Library, located at %s.%n%n" , b.getBranchName(), b.getBranchAddress());
+		}
+		
+		
+		
+		
+	}
+
 	
 
 }

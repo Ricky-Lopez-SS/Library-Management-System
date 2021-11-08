@@ -35,7 +35,7 @@ public class View {
 	}
 	
 	public static void printSQLErr() {
-		System.out.println("Sorry, an SQL Error has occurred. Please try again, or try modifying the database.");
+		System.out.println("Sorry, an SQL Error has occurred. Please try again, or try restructuring the database.");
 	}
 	
 	public static void cancelOperationNotice() {

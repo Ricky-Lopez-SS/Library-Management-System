@@ -4,6 +4,7 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -73,8 +74,6 @@ public class Dao {
 		
 		String query = "SELECT * FROM tbl_book WHERE title LIKE '" + bookName + "'";
 		
-		System.out.println(query);
-		
 		PreparedStatement stmnt = conn.prepareStatement(query);
 		
 		ResultSet rs = stmnt.executeQuery();
@@ -83,6 +82,21 @@ public class Dao {
 			return new Book(rs.getInt("bookId") , rs.getString("title"), rs.getInt("pubId"));
 		
 		return null;
+		
+	}
+	
+	public Borrower retrieveBorrower(int cardNo) throws SQLException {
+		
+		String query = String.format("SELECT * FROM tbl_borrower WHERE cardNo = %d" , cardNo);
+		
+		PreparedStatement stmnt = conn.prepareStatement(query);
+		
+		ResultSet rs = stmnt.executeQuery();
+		
+		if(rs.next())
+			return new Borrower(rs.getInt("cardNo"), rs.getString("name"), rs.getString("address"), rs.getString("phone") );
+		
+		throw new SQLException();
 		
 	}
 	
@@ -105,41 +119,28 @@ public class Dao {
 		
 	}
 	
-	public List<Book> retrieveBooks(int branchId) throws SQLException {
-		
-		List<Book> list = new ArrayList<Book>();
-		
-		String query = "SELECT tbl_book_copies.bookId, title, pubId FROM tbl_book_copies "
-				+ "INNER JOIN tbl_book ON tbl_book.bookId = tbl_book_copies.bookId "
-				+ "WHERE branchId = " + branchId;
-		
-		PreparedStatement stmnt = conn.prepareStatement(query);
-		
-		ResultSet rs = stmnt.executeQuery();
-		
-		while(rs.next()) {
-			list.add( new Book(rs.getInt("bookId") , rs.getString("title") , rs.getInt("pubId")) );
-		}
-		
-		return list;
-		
-	}
+
 	
 	public List<String> retrieveBookTitlesAndAuthors() throws SQLException {
 		
 		List<String> list = new ArrayList<String>();
 		
 		String query = "SELECT title, authorName FROM tbl_book "
-				+ "INNER JOIN tbl_book_authors ON tbl_book.bookId = tbl_book_authors.bookId "
-				+ "INNER JOIN tbl_author ON tbl_book_authors.authorId = tbl_author.authorId";
+				+ "LEFT JOIN tbl_book_authors ON tbl_book.bookId = tbl_book_authors.bookId "
+				+ "LEFT JOIN tbl_author ON tbl_book_authors.authorId = tbl_author.authorId";
 		
 		PreparedStatement stmnt = conn.prepareStatement(query);
 		
 		ResultSet rs = stmnt.executeQuery();
 		
 		while(rs.next()) {
-			list.add(rs.getString("title") + " by " + rs.getString("authorName"));
+			
+			if( rs.getString("authorName") == null ) //no author
+					list.add(String.format("%s", rs.getString("title")));
+			else 
+				list.add(String.format("'%s' by %s", rs.getString("title") , rs.getString("authorName")));
 		}
+		
 		
 		return list;
 		
@@ -169,6 +170,8 @@ public class Dao {
 		
 	}
 	
+
+	
 	public List<Book> retrieveBooks() throws SQLException {
 		
 		List<Book> list = new ArrayList<Book>();
@@ -183,6 +186,26 @@ public class Dao {
 			list.add( new Book(rs.getInt("BookId"), rs.getString("title"), rs.getInt("pubId")) );
 		}
 		
+		
+		return list;
+		
+	}
+	
+	public List<Book> retrieveBooks(int branchId) throws SQLException {
+		
+		List<Book> list = new ArrayList<Book>();
+		
+		String query = "SELECT tbl_book_copies.bookId, title, pubId FROM tbl_book_copies "
+				+ "INNER JOIN tbl_book ON tbl_book.bookId = tbl_book_copies.bookId "
+				+ "WHERE branchId = " + branchId;
+		
+		PreparedStatement stmnt = conn.prepareStatement(query);
+		
+		ResultSet rs = stmnt.executeQuery();
+		
+		while(rs.next()) {
+			list.add( new Book(rs.getInt("bookId") , rs.getString("title") , rs.getInt("pubId")) );
+		}
 		
 		return list;
 		
@@ -266,6 +289,43 @@ public class Dao {
 		
 	}
 	
+	public List<BookLoan> retrieveBookLoans() throws SQLException {
+		
+		List<BookLoan> list = new ArrayList<BookLoan>();
+		
+		String query = "SELECT * FROM tbl_book_loans";
+		
+		PreparedStatement stmnt = conn.prepareStatement(query);
+		
+		ResultSet rs = stmnt.executeQuery();
+		
+		while(rs.next()) 
+			list.add(new BookLoan
+					(rs.getInt("bookId"), rs.getInt("branchId"), rs.getInt("cardNo"), rs.getDate("dateOut"), rs.getDate("dueDate"), rs.getDate("dateIn") ));
+		
+		return list;
+		
+	}
+	
+	public List<String> retrieveBookLoansAndNames() throws SQLException {
+		
+		List<String> list = new ArrayList<String>();
+		
+		String query = "select name, title, tbl_book_loans.bookId, dateOut, dueDate, dateIn from tbl_book_loans "
+				+ "LEFT JOIN tbl_borrower ON tbl_borrower.cardNo = tbl_book_loans.cardNo "
+				+ "INNER JOIN tbl_book ON tbl_book_loans.bookId = tbl_book.bookId";
+		
+		PreparedStatement stmnt = conn.prepareStatement(query);
+		
+		ResultSet rs = stmnt.executeQuery();
+		
+		while(rs.next()) 
+			list.add(String.format("%-20s %-20s %-20s %-20s %-20s", rs.getString("name"), rs.getString("title"), rs.getDate("dateOut"), rs.getDate("dueDate"), rs.getDate("dateIn")));
+		
+		return list;
+		
+	}
+	
 	
 	public List<Book> retrieveBooksOfBranch(int branchId) throws SQLException {
 		
@@ -344,6 +404,17 @@ public class Dao {
 		
 	}
 	
+	public int updateBookLoan(int bookId, int branchId, int cardNo, String newDate) throws SQLException {
+		
+		String query = String.format
+				("UPDATE tbl_book_loans SET dueDate = '%s' WHERE bookId = %d AND branchId = %d AND cardNo = %d", newDate, bookId, branchId, cardNo);
+		
+		PreparedStatement stmnt = conn.prepareStatement(query);
+		
+		return stmnt.executeUpdate();
+		
+	}
+	
 	public int updateBookLoanReturn(int bookId, int branchId, int cardNo) throws SQLException {
 		
 		String query = String.format("UPDATE tbl_book_loans SET dateIn = current_date() WHERE bookId = %d AND branchId = %d AND cardNo = %d" , 
@@ -417,13 +488,9 @@ public class Dao {
 		
 		query.append(")");
 		
-		System.out.println(query); return 1;
-		
-		/*
 		PreparedStatement stmnt = conn.prepareStatement(query.toString());
 	
 		return stmnt.executeUpdate();
-		*/
 		
 	}
 
@@ -436,11 +503,11 @@ public class Dao {
 		return stmnt.executeQuery();
 	}
 	
-	public int updateItem(String field, String newFieldValue, String primaryField, int primaryKey) throws SQLException {
+	public int updateItem(String tableName, String field, String newFieldValue, String primaryField, int primaryKey) throws SQLException {
 		
 		try{
-			String query = String.format("UPDATE tbl_author SET %s = '%s' WHERE %s = %d",
-					field, newFieldValue, primaryField, primaryKey);
+			String query = String.format("UPDATE %s SET %s = '%s' WHERE %s = %d",
+					tableName, field, newFieldValue, primaryField, primaryKey);
 			
 			PreparedStatement stmnt = conn.prepareStatement(query);
 			
@@ -449,8 +516,8 @@ public class Dao {
 			
 		}catch(SQLException e) { //newFieldValue is not a string, therefore treat as integer.
 			
-			String query = String.format("UPDATE tbl_author SET %s = %s WHERE %s = %d", 
-					field, newFieldValue, primaryField, primaryKey);
+			String query = String.format("UPDATE %s SET %s = %s WHERE %s = %d", 
+					tableName, field, newFieldValue, primaryField, primaryKey);
 			
 			PreparedStatement stmnt = conn.prepareStatement(query);
 			
@@ -495,5 +562,52 @@ public class Dao {
 		
 		
 	}
+
+	public List<String> retrieveInfoOfBooks() throws SQLException {
+		
+		List<String> list = new ArrayList<String>();
+
+		String query = "SELECT tbl_book.title, tbl_author.authorName, tbl_publisher.publisherName, tbl_genre.genre_name FROM tbl_book "
+				+ "INNER JOIN tbl_book_authors ON tbl_book_authors.bookId = tbl_book.bookId "
+				+ "INNER JOIN tbl_author ON tbl_author.authorId = tbl_book_authors.authorId "
+				+ "INNER JOIN tbl_book_genres ON tbl_book_genres.bookId = tbl_book.bookId "
+				+ "INNER JOIN tbl_genre ON tbl_genre.genre_id = tbl_book_genres.genre_id "
+				+ "INNER JOIN tbl_publisher ON tbl_publisher.publisherId = tbl_book.pubId";
+		
+		PreparedStatement stmnt = conn.prepareStatement(query);
+		
+		ResultSet rs = stmnt.executeQuery();
+		
+		while(rs.next())
+			list.add(String.format
+					("%s by %s, published by %s [%s]", 
+							rs.getString("title"), rs.getString("authorName"), rs.getString("publisherName"), rs.getString("genre_name").toUpperCase()) );
+		
+		return list;
+		
+	}
+
+	public List<Branch> findBranchesWithBook(int bookId) throws SQLException {
+		
+		List<Branch> list = new ArrayList<Branch>();
+		
+		String query = "SELECT tbl_library_branch.branchId, branchName, branchAddress FROM tbl_book_copies "
+				+ "INNER JOIN tbl_library_branch ON tbl_library_branch.branchId = tbl_book_copies.branchId "
+				+ "WHERE bookId = %d";
+			
+			query = String.format(query, bookId);
+			
+		PreparedStatement stmnt = conn.prepareStatement(query);
+		
+		ResultSet rs = stmnt.executeQuery();
+		
+		while(rs.next())
+			list.add(new Branch(rs.getInt("branchId"), rs.getString("branchName"), rs.getString("branchAddress") ) );
+		
+		return list;
+		
+	}
+	
+
 
 }

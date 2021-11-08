@@ -1,12 +1,9 @@
 package view;
 
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
+
 import java.util.List;
 
 import entity.Author;
-import entity.Book;
 import entity.Borrower;
 import entity.Branch;
 import entity.Genre;
@@ -62,10 +59,12 @@ public class ViewAdmin {
 
 	public static void displayAdminCreate(String itemType , String[] attributes) {
 		
-		System.out.format("%nCreating %s..%nitem field attributes:%n     " , itemType);
+		System.out.format("%n*******************************************************************%n%n");
+		
+		System.out.format("Creating %s..%n%nitem field attributes:%n     " , itemType);
 		
 		for(String s : attributes)
-			System.out.format("%s     " , s);
+			System.out.format("'%s'     " , s);
 		
 		System.out.format("%n%nPlease enter a value for each field attribute. Invalid fields will result in error.%n%n");
 		
@@ -75,8 +74,9 @@ public class ViewAdmin {
 	
 	public static void displayAdminUpdate(String itemType, String[] attributes) {
 		
+		System.out.format("%n*******************************************************************%n%n");
 		
-		System.out.format("%nUpdating %s..%n%nitem field attributes:%n%n" , itemType);
+		System.out.format("Updating %s..%n%nitem field attributes:%n%n" , itemType);
 		
 		for(int i = 1; i <= attributes.length; i++) 
 			System.out.format("%s     ", attributes[i-1]);
@@ -89,6 +89,8 @@ public class ViewAdmin {
 	public static void displayAdminUpdate(String field, List<Modelable> itemList) {
 		
 		int counter;
+		
+		System.out.format("%n*******************************************************************%n%n");
 		
 		System.out.format("Updating %s..%n%n", field);
 		
@@ -110,8 +112,25 @@ public class ViewAdmin {
 		
 	}
 	
+	public static void displayAdminDelete(List<Modelable> itemList) {
+		
+		int counter;
+		
+		System.out.format("%n*******************************************************************%n%n");
+		
+		System.out.format("Please select the item you would like to delete.%n%n");
+		
+		for(counter = 1; counter <= itemList.size(); counter++)
+			System.out.format("%d) %s%n" , counter, itemList.get(counter-1));
+		
+		System.out.format("%d) Quit to Admin Menu%n%n" , counter);
+		
+	}
+	
 
 	public static void displayBooks(List<String> bookList) {
+		
+		System.out.format("%n*******************************************************************%n%n");
 		
 		System.out.format("LIST OF ALL BOOKS%n%n");
 		
@@ -122,6 +141,8 @@ public class ViewAdmin {
 
 	public static void displayBorrowers(List<Borrower> borrowerList) {
 		
+		System.out.format("%n*******************************************************************%n%n");
+		
 		System.out.format("LIST OF ALL BORROWERS%n%n");
 		
 		for(int i = 1; i <= borrowerList.size(); i++) 
@@ -130,15 +151,19 @@ public class ViewAdmin {
 	}
 
 	public static void displayBranches(List<Branch> branchList) {
+		
+		System.out.format("%n*******************************************************************%n%n");
 
 		System.out.format("LIST OF ALL BRANCHES%n%n");
 		
 		for(int i = 1; i <= branchList.size(); i++) 
-			System.out.format("%s%n", branchList.get(i-1).getBranchName());
+			System.out.format("%s Library%n", branchList.get(i-1).getBranchName());
 		
 	}
 
 	public static void displayGenres(List<Genre> genreList) {
+		
+		System.out.format("%n*******************************************************************%n%n");
 		
 		System.out.format("LIST OF ALL GENRES%n%n");
 		
@@ -149,6 +174,8 @@ public class ViewAdmin {
 
 	public static void displayPublishers(List<Publisher> publisherList) {
 		
+		System.out.format("%n*******************************************************************%n%n");
+		
 		System.out.format("LIST OF ALL PUBLISHERS%n%n");
 		
 		for(int i = 1; i <= publisherList.size(); i++) 
@@ -157,6 +184,8 @@ public class ViewAdmin {
 	}
 
 	public static void displayAuthors(List<Author> authorList) {
+		
+		System.out.format("%n*******************************************************************%n%n");
 
 		System.out.format("LIST OF ALL AUTHORS%n%n");
 		
@@ -164,17 +193,33 @@ public class ViewAdmin {
 			System.out.format("%s%n", authorList.get(i-1).getAuthorName());
 		
 	}
+	
+	public static void displayAdminRead() {
+		
+		System.out.format("%nPress 'Enter' to return to Admin Menu.");
+		
+	}
 
-	public static void displayAdminDelete(List<Modelable> itemList) {
+	public static void displayAdmin2(List<String> bookLoans) {
 		
 		int counter;
 		
-		System.out.format("Please select the item you would like to delete.%n%n");
+		System.out.format("%n*******************************************************************%n%n");
 		
-		for(counter = 1; counter <= itemList.size(); counter++)
-			System.out.format("%d) %s%n" , counter, itemList.get(counter-1));
+		System.out.format("Please choose a loan you would like to override:%n%n");
 		
-		System.out.format("%d) Quit to Admin Menu%n%n" , counter);
+		System.out.format("   %-20s %-20s %-20s %-20s %-20s%n%n", "NAME", "BOOK TITLE", "DATE IN", "DUE DATE", "DATE OUT");
+		
+		for(counter = 1; counter <= bookLoans.size(); counter++) {
+			System.out.format("%d) %s%n" , counter, bookLoans.get(counter-1));
+		}
+		
+		System.out.format("%n%n%d) Quit to Admin Menu%n%n" , counter);
+	}
+	
+	public static void displayAdmin2Cont() {
+		
+		System.out.format("Please enter the date you would like to override the due date to in the format YYYY-MM-DD .%n%n");
 		
 	}
 

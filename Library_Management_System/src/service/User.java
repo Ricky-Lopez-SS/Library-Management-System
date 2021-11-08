@@ -46,7 +46,7 @@ public class User {
 				
 				if(borrower == null) {
 					View.printUserErr();
-					continue;
+					return 0;
 				}
 				
 			}catch(SQLException e) {
@@ -70,6 +70,8 @@ public class User {
 			else if("2".equals(input)) 
 				returnCode = bor3(borrower);
 			else if("3".equals(input))
+				returnCode = bor4(borrower);
+			else if("4".equals(input))
 				return 0;
 			else
 				View.printUserErr();
@@ -92,6 +94,8 @@ public class User {
 	}
 	
 	
+
+
 	public int bor2(Borrower borrower) {
 		
 		int input = 0;
@@ -189,7 +193,7 @@ public class User {
 	}
 	
 	
-public int bor3(Borrower borrower) {
+	public int bor3(Borrower borrower) {
 		
 		int input = 0;
 		Branch branch = null;
@@ -263,9 +267,12 @@ public int bor3(Borrower borrower) {
 				
 				book = bookList.get(input-1);
 				
-				DB.updateBookLoanReturn(book.getBookId(), branch.getBranchId(), borrower.getCardNo());
+				int wasUpdated = DB.updateBookLoanReturn(book.getBookId(), branch.getBranchId(), borrower.getCardNo());
 				
-				View.success();
+				if(wasUpdated == 0)
+					ViewUser.displayNoLoan();
+				else
+					View.success();
 				
 				break;
 				
@@ -285,6 +292,42 @@ public int bor3(Borrower borrower) {
 		
 	}
 	
-	
+	private int bor4(Borrower borrower) {
+		
+		int input = 0;
+		
+		
+		try {
+		
+			List<Book> books = DB.retrieveBooks();
+			List<String> bookInfos = DB.retrieveBookTitlesAndAuthors();
+			
+			ViewUser.displayBor4(bookInfos);
+			
+			if(scnnr.hasNextLine())
+				input = Integer.parseInt(scnnr.nextLine());
+			
+			if(input == books.size())
+				return 1; //back to user menu.
+				
+			
+			if(input > books.size()) {
+				View.printUserErr();
+				return 1; 
+			}
+			
+			List<Branch> branchList = DB.findBranchesWithBook(books.get(input-1).getVerifiableAttribute());
+			
+			ViewUser.displayBor4Cont(branchList);
+			
+		}catch(SQLException e) {
+			View.printSQLErr();
+			return -1;
+		}
+		
+		
+		return 1;
+		
+	}
 	
 }
