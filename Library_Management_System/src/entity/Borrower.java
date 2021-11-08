@@ -7,7 +7,9 @@ package entity;
  * @author Lopez
  *
  */
-public class Borrower {
+public class Borrower implements Modelable {
+	
+	private final String ITEMTYPE = "Borrower";
 
 	private int cardNo;
 	private String name;
@@ -52,6 +54,21 @@ public class Borrower {
 
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+	
+	@Override
+	public String toString() {
+		return name;
+	}
+	
+	@Override
+	public String getItemType() {
+		return ITEMTYPE;
+	}
+	
+	@Override
+	public int getVerifiableAttribute() {
+		return cardNo;
 	}
 
 }

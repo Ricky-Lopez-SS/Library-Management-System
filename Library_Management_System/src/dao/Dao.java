@@ -435,5 +435,65 @@ public class Dao {
 		
 		return stmnt.executeQuery();
 	}
+	
+	public int updateItem(String field, String newFieldValue, String primaryField, int primaryKey) throws SQLException {
+		
+		try{
+			String query = String.format("UPDATE tbl_author SET %s = '%s' WHERE %s = %d",
+					field, newFieldValue, primaryField, primaryKey);
+			
+			PreparedStatement stmnt = conn.prepareStatement(query);
+			
+			return stmnt.executeUpdate();
+			
+			
+		}catch(SQLException e) { //newFieldValue is not a string, therefore treat as integer.
+			
+			String query = String.format("UPDATE tbl_author SET %s = %s WHERE %s = %d", 
+					field, newFieldValue, primaryField, primaryKey);
+			
+			PreparedStatement stmnt = conn.prepareStatement(query);
+			
+			return stmnt.executeUpdate();
+			
+		}
+		
+	}
+
+	public int updateAuthor(String field, String newFieldValue, int primaryKey) throws SQLException{
+		
+		try{
+			String query = String.format("UPDATE tbl_author SET %s = '%s' WHERE authorId = %d",
+					field, newFieldValue, primaryKey);
+			
+			PreparedStatement stmnt = conn.prepareStatement(query);
+			
+			return stmnt.executeUpdate();
+			
+			
+		}catch(SQLException e) { //newFieldValue is not a string, therefore treat as integer.
+			
+			String query = String.format("UPDATE tbl_author SET %s = %s WHERE authorId = %d", 
+					field, newFieldValue, primaryKey);
+			
+			PreparedStatement stmnt = conn.prepareStatement(query);
+			
+			return stmnt.executeUpdate();
+			
+		}
+		
+	}
+
+	public int deleteItem(Modelable item, String tableName, String primaryField) throws SQLException{
+		
+		String query = String.format
+				("DELETE FROM %s WHERE %s = %d" , tableName, primaryField, item.getVerifiableAttribute() );
+		
+		PreparedStatement stmnt = conn.prepareStatement(query);
+		
+		return stmnt.executeUpdate();
+		
+		
+	}
 
 }

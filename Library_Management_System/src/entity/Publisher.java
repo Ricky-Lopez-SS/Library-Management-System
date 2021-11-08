@@ -8,7 +8,9 @@ package entity;
  *
  */
 
-public class Publisher {
+public class Publisher implements Modelable {
+	
+	private final String ITEMTYPE = "Publisher";
 
 	private int publisherId;
 	private String publisherName;
@@ -53,6 +55,21 @@ public class Publisher {
 
 	public void setPublisherAddress(String publisherAddress) {
 		this.publisherAddress = publisherAddress;
+	}
+	
+	@Override
+	public String toString() {
+		return publisherName;
+	}
+	
+	@Override
+	public String getItemType() {
+		return ITEMTYPE;
+	}
+	
+	@Override
+	public int getVerifiableAttribute() {
+		return publisherId;
 	}
 
 }

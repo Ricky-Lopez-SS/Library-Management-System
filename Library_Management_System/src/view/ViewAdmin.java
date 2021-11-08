@@ -10,6 +10,7 @@ import entity.Book;
 import entity.Borrower;
 import entity.Branch;
 import entity.Genre;
+import entity.Modelable;
 import entity.Publisher;
 
 public class ViewAdmin {
@@ -71,6 +72,44 @@ public class ViewAdmin {
 		
 		
 	}
+	
+	public static void displayAdminUpdate(String itemType, String[] attributes) {
+		
+		
+		System.out.format("%nUpdating %s..%n%nitem field attributes:%n%n" , itemType);
+		
+		for(int i = 1; i <= attributes.length; i++) 
+			System.out.format("%s     ", attributes[i-1]);
+		
+		System.out.format("%n%nPlease type in the field you would like to update.%n%n");
+		
+		
+	}
+	
+	public static void displayAdminUpdate(String field, List<Modelable> itemList) {
+		
+		int counter;
+		
+		System.out.format("Updating %s..%n%n", field);
+		
+		System.out.format
+			("Please choose a %s in the database that you would like to update:%n%n", itemList.get(0).getItemType() );
+		
+		for(counter = 1; counter <= itemList.size(); counter++ )
+			System.out.format("%d) %s%n", counter , itemList.get(counter-1));
+		
+		System.out.format("%n%n%d) Quit to Admin Menu%n%n" , counter);
+		
+		
+		
+	}
+	
+	public static void displayAdminUpdate() {
+		
+		System.out.format("Please enter the new identity for the field you have chosen to modify:%n%n");
+		
+	}
+	
 
 	public static void displayBooks(List<String> bookList) {
 		
@@ -125,5 +164,21 @@ public class ViewAdmin {
 			System.out.format("%s%n", authorList.get(i-1).getAuthorName());
 		
 	}
+
+	public static void displayAdminDelete(List<Modelable> itemList) {
+		
+		int counter;
+		
+		System.out.format("Please select the item you would like to delete.%n%n");
+		
+		for(counter = 1; counter <= itemList.size(); counter++)
+			System.out.format("%d) %s%n" , counter, itemList.get(counter-1));
+		
+		System.out.format("%d) Quit to Admin Menu%n%n" , counter);
+		
+	}
+
+
+
 
 }

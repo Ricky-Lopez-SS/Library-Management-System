@@ -7,8 +7,10 @@ package entity;
  * @author Lopez
  *
  */
-public class Author {
-
+public class Author implements Modelable{
+	
+	private final String ITEMTYPE = "Author";
+	
 	private int authorId;
 	private String authorName;
 
@@ -35,5 +37,22 @@ public class Author {
 	public void setAuthorName(String authorName) {
 		this.authorName = authorName;
 	}
+	
+	@Override
+	public String toString() {
+		
+		return authorName;
+	}
+	
+	@Override
+	public String getItemType() {
+		return ITEMTYPE;
+	}
+	
+	@Override
+	public int getVerifiableAttribute() {
+		return authorId;
+	}
+	
 
 }

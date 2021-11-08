@@ -8,12 +8,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import dao.Dao;
 import entity.Author;
 import entity.Borrower;
 import entity.Branch;
 import entity.Genre;
+import entity.Modelable;
 import entity.Publisher;
 import view.View;
 import view.ViewAdmin;
@@ -381,42 +383,270 @@ public class Administrator {
 
 
 	private int adminUpdate(item dataType) {
-		switch(dataType) {
-			case AUTHOR:
-				
-			case BOOK:
-				
-			case BORROWER:
+		
+		
+		List<Modelable> items = null;
+		String field, newFieldValue;
+		int selectionValue = -1;
+		field = newFieldValue = "";
+		
+		try {
 			
-			case BRANCH:
+			switch(dataType) {
+				case AUTHOR:
+					
+					ViewAdmin.displayAdminUpdate("AUTHOR", new String[] {"authorId", "authorName"} );
+					
+					if(scnnr.hasNextLine())
+						field = scnnr.nextLine();
+					
+					//my pride and joy
+					items = DB.retrieveAuthors()
+							.stream().map( (x) -> (Modelable) x ).collect(Collectors.toList());
+					
+					
+					ViewAdmin.displayAdminUpdate(field, items);
+					
+					if(scnnr.hasNextLine())
+						selectionValue = Integer.parseInt(scnnr.nextLine());
+					
+					ViewAdmin.displayAdminUpdate();
+					
+					if(scnnr.hasNextLine())
+						newFieldValue = scnnr.nextLine();
+					
+					DB.updateItem
+						(field, newFieldValue, "authorId", items.get(selectionValue-1).getVerifiableAttribute() );
+					
+					break;
+					
+					
+				case BOOK:
+					
+					ViewAdmin.displayAdminUpdate("BOOK", new String[] {"bookId", "title" , "pubId"} );
+					
+					if(scnnr.hasNextLine())
+						field = scnnr.nextLine();
+					
+					//my pride and joy
+					items = DB.retrieveBooks()
+							.stream().map( (x) -> (Modelable) x ).collect(Collectors.toList());
+					
+					
+					ViewAdmin.displayAdminUpdate(field, items);
+					
+					if(scnnr.hasNextLine())
+						selectionValue = Integer.parseInt(scnnr.nextLine());
+					
+					ViewAdmin.displayAdminUpdate();
+					
+					if(scnnr.hasNextLine())
+						newFieldValue = scnnr.nextLine();
+					
+					DB.updateItem
+						(field, newFieldValue, "bookId", items.get(selectionValue-1).getVerifiableAttribute() );
+					
+					break;
+					
+				case BORROWER:
+					
+					ViewAdmin.displayAdminUpdate("BORROWER", new String[] {"cardNo", "name" , "address" , "phone"} );
+					
+					if(scnnr.hasNextLine())
+						field = scnnr.nextLine();
+					
+					//my pride and joy
+					items = DB.retrieveBooks()
+							.stream().map( (x) -> (Modelable) x ).collect(Collectors.toList());
+					
+					
+					ViewAdmin.displayAdminUpdate(field, items);
+					
+					if(scnnr.hasNextLine())
+						selectionValue = Integer.parseInt(scnnr.nextLine());
+					
+					ViewAdmin.displayAdminUpdate();
+					
+					if(scnnr.hasNextLine())
+						newFieldValue = scnnr.nextLine();
+					
+					DB.updateItem
+						(field, newFieldValue, "cardNo", items.get(selectionValue-1).getVerifiableAttribute() );
+					
+					break;
 				
-			case GENRE:
-				
-			case PUBLISHER:
+				case BRANCH:
+					
+					ViewAdmin.displayAdminUpdate("BRANCH", new String[] {"branchId", "branchName" , "branchAddress"} );
+					
+					if(scnnr.hasNextLine())
+						field = scnnr.nextLine();
+					
+					//my pride and joy
+					items = DB.retrieveBooks()
+							.stream().map( (x) -> (Modelable) x ).collect(Collectors.toList());
+					
+					
+					ViewAdmin.displayAdminUpdate(field, items);
+					
+					if(scnnr.hasNextLine())
+						selectionValue = Integer.parseInt(scnnr.nextLine());
+					
+					ViewAdmin.displayAdminUpdate();
+					
+					if(scnnr.hasNextLine())
+						newFieldValue = scnnr.nextLine();
+					
+					DB.updateItem
+						(field, newFieldValue, "branchId", items.get(selectionValue-1).getVerifiableAttribute() );
+					
+					break;
+					
+				case GENRE:
+					
+					ViewAdmin.displayAdminUpdate("GENRE", new String[] {"genreId", "genreName"} );
+					
+					if(scnnr.hasNextLine())
+						field = scnnr.nextLine();
+					
+					//my pride and joy
+					items = DB.retrieveBooks()
+							.stream().map( (x) -> (Modelable) x ).collect(Collectors.toList());
+					
+					
+					ViewAdmin.displayAdminUpdate(field, items);
+					
+					if(scnnr.hasNextLine())
+						selectionValue = Integer.parseInt(scnnr.nextLine());
+					
+					ViewAdmin.displayAdminUpdate();
+					
+					if(scnnr.hasNextLine())
+						newFieldValue = scnnr.nextLine();
+					
+					DB.updateItem
+						(field, newFieldValue, "genreId", items.get(selectionValue-1).getVerifiableAttribute() );
+					
+					break;
+					
+				case PUBLISHER:
+					
+					ViewAdmin.displayAdminUpdate("PUBLISHER", new String[] {"publisherId", "publisherName" , "publisherAddress" , "publisherPhone"} );
+					
+					if(scnnr.hasNextLine())
+						field = scnnr.nextLine();
+					
+					//my pride and joy
+					items = DB.retrieveBooks()
+							.stream().map( (x) -> (Modelable) x ).collect(Collectors.toList());
+					
+					
+					ViewAdmin.displayAdminUpdate(field, items);
+					
+					if(scnnr.hasNextLine())
+						selectionValue = Integer.parseInt(scnnr.nextLine());
+					
+					ViewAdmin.displayAdminUpdate();
+					
+					if(scnnr.hasNextLine())
+						newFieldValue = scnnr.nextLine();
+					
+					DB.updateItem
+						(field, newFieldValue, "publisherId", items.get(selectionValue-1).getVerifiableAttribute() );
+					
+					break;
+			}
+		}catch(Exception e) {
+			View.printSQLErr();
+			return -1;
 		}
+		
+		View.success();
 		return 0;
 	}
 
 
 	private int adminDelete(item dataType) {
-		switch(dataType) {
-			case AUTHOR:
+		
+		List<Modelable> itemList = null;
+		String tableName, primaryField;
+		tableName = primaryField = "";
+		int selectionValue = -1;
+		
+		try {
+			switch(dataType) {
+				case AUTHOR:
+					
+					itemList = DB.retrieveAuthors()
+						.stream().map( (x) -> (Modelable) x ).collect(Collectors.toList());
+					tableName = "tbl_author";
+					primaryField = "authorId";
+					break;
+					
+				case BOOK:
+					
+					itemList = DB.retrieveBooks()
+						.stream().map( (x) -> (Modelable) x ).collect(Collectors.toList());
+					tableName = "tbl_book";
+					primaryField = "bookId";
+					break;
+					
+					
+				case BORROWER:
+					
+					itemList = DB.retrieveBorrowers()
+						.stream().map( (x) -> (Modelable) x ).collect(Collectors.toList());
+					tableName = "tbl_borrower";
+					primaryField = "cardNo";
+					break;
 				
-			case BOOK:
-				
-			case BORROWER:
+				case BRANCH:
+					
+					itemList = DB.retrieveLibraryBranches()
+						.stream().map( (x) -> (Modelable) x ).collect(Collectors.toList());
+					tableName = "tbl_library_branch";
+					primaryField = "branchId";
+					break;
+					
+				case GENRE:
+					
+					itemList = DB.retrieveGenres()
+						.stream().map( (x) -> (Modelable) x ).collect(Collectors.toList());
+					tableName = "tbl_genre";
+					primaryField = "genreId";
+					break;
+					
+				case PUBLISHER:
+					
+					itemList = DB.retrievePublishers()
+						.stream().map( (x) -> (Modelable) x ).collect(Collectors.toList());
+					tableName = "tbl_publisher";
+					primaryField = "publisherId";
+					break;
+			}
 			
-			case BRANCH:
-				
-			case GENRE:
-				
-			case PUBLISHER:
+			ViewAdmin.displayAdminDelete(itemList);
+			
+			if(scnnr.hasNextLine())
+				selectionValue = Integer.parseInt(scnnr.nextLine());
+			
+			
+			DB.deleteItem(itemList.get(selectionValue-1), tableName, primaryField);
+		
+		}catch(SQLException e) {
+			View.printSQLErr();
+			return -1;
 		}
+		
+		View.success();
+
 		return 0;
 	}
 
 
 	public int admin2() {
+		
+		
 		return 1;
 	}
 

@@ -7,8 +7,10 @@ package entity;
  * @author Lopez
  *
  */
-public class Book {
+public class Book implements Modelable {
 
+	private final String ITEMTYPE = "Book";
+	
 	private int bookId;
 	private String title;
 	private int pubId;
@@ -43,5 +45,19 @@ public class Book {
 	public void setPubId(int pubId) {
 		this.pubId = pubId;
 	}
+	
+	@Override
+	public String toString() {
+		return title;
+	}
 
+	@Override
+	public String getItemType() {
+		return ITEMTYPE;
+	}
+	
+	@Override
+	public int getVerifiableAttribute() {
+		return bookId;
+	}
 }

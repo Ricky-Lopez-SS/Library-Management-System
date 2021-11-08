@@ -7,7 +7,9 @@ package entity;
  * @author Lopez
  *
  */
-public class Branch {
+public class Branch implements Modelable{
+	
+	private final String ITEMTYPE = "Branch";
 
 	private int branchId;
 	private String branchName;
@@ -42,6 +44,21 @@ public class Branch {
 
 	public void setBranchAddress(String branchAddress) {
 		this.branchAddress = branchAddress;
+	}
+	
+	@Override
+	public String toString() {
+		return branchName;
+	}
+	
+	@Override
+	public String getItemType() {
+		return ITEMTYPE;
+	}
+	
+	@Override
+	public int getVerifiableAttribute() {
+		return branchId;
 	}
 
 }
